@@ -21,11 +21,11 @@ ff1.Cache.enable_cache('Cache')
 
 pd.options.mode.chained_assignment = None
 
-session = ff1.get_session(2021, 'Brazil', 'R')
+session = ff1.get_session(2022, 'Brazil', 'FP1')
 session.load()
 
-driver1 = "HAM"
-driver2 = "VER"
+driver1 = "OCO"
+driver2 = "PER"
 
 d1 = session.laps.pick_driver(driver1).pick_fastest()
 d2 = session.laps.pick_driver(driver2).pick_fastest()
@@ -62,13 +62,15 @@ fastest_driver = avg_speed.loc[avg_speed.groupby(['Minisector'])['Speed'].idxmax
 fastest_driver = fastest_driver[['Minisector','Driver']].rename(columns={'Driver': 'Fastest_driver'})
 
 telemetry = telemetry.merge(fastest_driver, on=['Minisector'])
-telemetry.sort_values(by=['Distance'])
+telemetry = telemetry.sort_values(by=['Distance'])
 
 telemetry.loc[telemetry['Fastest_driver'] ==  driver1, 'Fastest_driver_int'] = 1
 telemetry.loc[telemetry['Fastest_driver'] ==  driver2, 'Fastest_driver_int'] = 2
 
-print(telemetry.head())
+print(telemetry.columns)
 
+#Change the graph to be a legend instead of a colorbat
+#figure out a way to change the colors of the graph
 def minisector_plot(save=False, details=True):
     x = np.array(telemetry['X'].values)
     y = np.array(telemetry['Y'].values)
@@ -76,7 +78,6 @@ def minisector_plot(save=False, details=True):
     points = np.array([x,y]).T.reshape(-1,1,2)
     segments = np.concatenate([points[:-1], points[1:]], axis = 1)
     driverlap = telemetry['Fastest_driver_int'].to_numpy().astype(float)
-    #also plotting line distance from m-sector to m-sector
 
     cmap = cm.get_cmap('RdYlBu', 2) #change to driver colors
     lc_driv = LineCollection(segments, norm=plt.Normalize(1,cmap.N+1), cmap=cmap)
@@ -84,7 +85,7 @@ def minisector_plot(save=False, details=True):
     lc_driv.set_linewidth(2)
     
 
-    plt.rcParams['figure.figsize'] = [12,5]
+    plt.rcParams['figure.figsize'] = [10,5]
 
     if details:
         title = plt.suptitle(
