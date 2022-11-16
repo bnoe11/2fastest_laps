@@ -21,11 +21,11 @@ ff1.Cache.enable_cache('Cache')
 
 pd.options.mode.chained_assignment = None
 
-session = ff1.get_session(2022, 'Brazil', 'FP1')
+session = ff1.get_session(2022, 'Saudi Arabia', 'Race')
 session.load()
 
-driver1 = "OCO"
-driver2 = "PER"
+driver1 = "LEC"
+driver2 = "VER"
 
 d1 = session.laps.pick_driver(driver1).pick_fastest()
 d2 = session.laps.pick_driver(driver2).pick_fastest()
@@ -88,9 +88,7 @@ def minisector_plot(save=False, details=True):
     plt.rcParams['figure.figsize'] = [10,5]
 
     if details:
-        title = plt.suptitle(
-            f"2021 Brazilian GP Fastest Laps - Fastest Minisectors"
-        )
+        title = plt.suptitle(f"2022 Saudi Arabian GP - Fastest Minisectors\n@bnoebnoe | @ur_sac")
     
     plt.gca().add_collection(lc_driv)
     plt.axis('equal')
